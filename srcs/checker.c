@@ -6,7 +6,7 @@
 /*   By: pluu <pluu@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 16:42:48 by pluu              #+#    #+#             */
-/*   Updated: 2017/06/12 16:42:51 by pluu             ###   ########.fr       */
+/*   Updated: 2017/06/14 15:32:37 by pluu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 
 int	main(int argc, char **argv)
 {
-	t_stacks	*stacks;
+	t_stacks	*s;
 	t_vector	*ops;
 
-	init_stacks(&stacks);
+	init_stacks(&s);
 	vector_new(&ops);
 	if (argc == 1)
 		return (0);
-	else if (!get_check_stack(argc, argv, &stacks->s1) || !get_check_ops(&ops))
+	else if (!get_check_stack(argc, argv, &s) || !get_check_ops(&ops))
 		ft_putstr_fd("Error\n", STDERR_FILENO);
 	else
 	{
-		run(&stacks->s1, &stacks->s2, ops);
-		if (is_sort(stacks->s1, stacks->s2))
+		run(&s->s1, &s->s2, ops);
+		if (is_sort(s->s1, s->s2))
 			ft_putstr("OK\n");
 		else
 			ft_putstr("KO\n");
 	}
 	vector_dispose(&ops);
-	stacks_dispose(&stacks);
+	stacks_dispose(&s);
 	return (0);
 }
 

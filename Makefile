@@ -6,7 +6,7 @@
 #    By: pluu <pluu@student.42.us.org>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/09 19:07:03 by pluu              #+#    #+#              #
-#    Updated: 2017/06/12 16:43:17 by pluu             ###   ########.fr        #
+#    Updated: 2017/06/14 14:04:49 by pluu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,8 @@ SRCS	       = srcs/stack_funcs1.c \
 		 srcs/get_check_ops.c \
 		 srcs/helper_funcs.c \
 		 srcs/stacks.c \
-		 srcs/vecs.c
+		 srcs/vecs.c \
+		 srcs/display.c
 
 SRCS_CK         = srcs/checker.c
 SRCS_PS		= srcs/push_swap.c

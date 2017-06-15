@@ -6,7 +6,7 @@
 /*   By: pluu <pluu@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 16:43:05 by pluu              #+#    #+#             */
-/*   Updated: 2017/06/12 16:43:06 by pluu             ###   ########.fr       */
+/*   Updated: 2017/06/14 18:05:33 by pluu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,60 +14,69 @@
 
 int	main(int argc, char **argv)
 {
-	t_stacks	*stacks;
-	t_vecs		*vecs;
-	int		len;
+	t_stacks	*s;
+	t_vecs		*v;
 
-	init_stacks(&stacks);
-	init_vecs(&vecs);
+	init_stacks(&s);
+	init_vecs(&v);
 	if (argc == 1)
 		return (0);
-	if (!get_check_stack(argc, argv, &stacks->s1))
+	if (!get_check_stack(argc, argv, &s))
 		ft_putstr_fd("Error\n", STDERR_FILENO);
-	else if (!is_sort(stacks->s1, stacks->s2))
-	{
-		len = stack_len(stacks->s1);
-		vector_new(&vecs->ops);
-		handle_beg_sa(&stacks, &vecs);
-		if (len <= THREE)
-			sort_three(&stacks->s1, &vecs->ops);		
-		else if (len <= FIVE)
-			sort_five(&stacks, &vecs);
-		else
-			sort_rand(&stacks, &vecs);
-		ops_print(vecs->ops);
-	}
-	vecs_dispose(&vecs);
-	stacks_dispose(&stacks);
+	else if (!is_sort(s->s1, s->s2))
+		solve_ps(&s, &v);
+	vecs_dispose(&v);
+	stacks_dispose(&s);
 	return (0);
 }
 
-void	sort_three(t_node **s1, t_vector **arr)
+void	solve_ps(t_stacks **s, t_vecs **v)
+{
+	int	len;
+
+	display(*s, fn);
+	len = stack_len((*s)->s1);
+	vector_new(&(*v)->ops);
+	handle_beg_sa(s, v);
+	if (len <= THREE)
+		sort_three(s, &(*v)->ops);		
+	else if (len <= FIVE)
+		sort_five(s, v);
+	else
+		sort_rand(s, v);
+	if (!(*s)->v_flag && !(*s)->c_flag)
+		ops_print((*v)->ops);
+}
+
+void	sort_three(t_stacks **s, t_vector **v)
 {
 	int	max;
 	int	top;
 	int	bot;
 
-	max = stack_max(*s1);
-	top = stack_peek(*s1);
-	bot = (*s1)->data;
-	while (!is_sort_sa(*s1))
+	max = stack_max((*s)->s1);
+	top = stack_peek((*s)->s1);
+	bot = (*s)->s1->data;
+	while (!is_sort_sa((*s)->s1))
 	{
-		while (top < bot && !is_sort_sa(*s1))
+		while (top < bot && !is_sort_sa((*s)->s1))
 		{
-			rra(s1);
-			vector_add(arr, frra);
-			sa(s1);
-			vector_add(arr, fsa);
-			top = stack_peek(*s1);
-			bot = (*s1)->data;
+			rra(&(*s)->s1);
+			vector_add(v, frra);
+			display(*s, frra);
+			sa(&(*s)->s1);
+			display(*s, fsa);
+			vector_add(v, fsa);
+			top = stack_peek((*s)->s1);
+			bot = (*s)->s1->data;
 		}
 		while (top > bot)
 		{
-			rra(s1);
-			vector_add(arr, frra);
-			top = stack_peek(*s1);
-			bot = (*s1)->data;
+			rra(&(*s)->s1);
+			vector_add(v, frra);
+			display(*s, frra);
+			top = stack_peek((*s)->s1);
+			bot = (*s)->s1->data;
 		}
 	}
 }
@@ -104,7 +113,7 @@ void	sort_rand(t_stacks **s, t_vecs **v)
 	}
 	if (is_sort_stack((*v)->s1, (*s)->s1))
 	{
-		handle_top_max(&(*s)->s2, v, stack_max((*s)->s2));
+		handle_top_max(s, v, stack_max((*s)->s2));
 		merge(s, v);
 	}
 	if (!is_sort_sa((*s)->s1))
@@ -154,19 +163,23 @@ void	exe_elem(t_elem e, t_stacks **s, t_vector **ops)
 	{
 		exe_op(s, e.ab_op);
 		vector_add(ops, e.ab_op);
+		display(*s, e.ab_op);
 	}
 	while (e.a_op_cnt--)
 	{
 		exe_op(s, e.a_op);
 		vector_add(ops, e.a_op);
+		display(*s, e.a_op);
 	}
 	while (e.b_op_cnt--)
 	{
 		exe_op(s, e.b_op);
 		vector_add(ops, e.b_op);
+		display(*s, e.b_op);
 	}
 	exe_op(s, fpb);
 	vector_add(ops, fpb);
+	display(*s, fpb);
 }
 
 void	exe_op(t_stacks **s, int op)
@@ -187,16 +200,14 @@ void	exe_op(t_stacks **s, int op)
 		rrr(&(*s)->s1, &(*s)->s2);
 }
 
-/* after merge, the stack might be out of order -> sort_ascend */
 void	sort_ascend(t_stacks **s, t_vecs **v)
 {
 	vec_dispose(&(*v)->s1);
 	init_vec(&(*v)->s1, stack_len((*s)->s1));
 	pop_vec(&(*v)->s1, (*s)->s1);
-	handle_top_min1(&(*s)->s1, v, stack_min((*s)->s1));
+	handle_top_min1(s, v, stack_min((*s)->s1));
 }
 
-/* super merge func */
 void	merge(t_stacks **s, t_vecs **v)
 {
 	t_merge	vars;
@@ -206,20 +217,16 @@ void	merge(t_stacks **s, t_vecs **v)
 		init_merge_vars(&vars, *s);
 		if (!is_adj_max_min((*s)->s1, (*v)->s1) && !is_sort_sa((*s)->s1))
 		{
-			handle_adj_max_min(&(*s)->s1, v, vars.s1_min);
+			handle_adj_max_min(s, v, vars.s1_min);
 			continue ;
 		}
 		else if (vars.s2_top > vars.s1_max || vars.s2_top < vars.s1_min)
-		{
-			handle_top_min1(&(*s)->s1, v, vars.s1_min);
-		}
-		else if ((vars.s2_top < vars.s1_top && vars.s2_top < (*s)->s1->data)
-				|| vars.s2_top > vars.s1_top)
-		{
-			merge_hlpr1(&(*s)->s1, v, vars.s2_top);
-		}
+			handle_top_min1(s, v, vars.s1_min);
+		else if ((vars.s2_top < vars.s1_top && vars.s2_top < (*s)->s1->data) || vars.s2_top > vars.s1_top)
+			merge_hlpr1(s, v, vars.s2_top);
 		pa(&(*s)->s1, &(*s)->s2);
 		vector_add(&(*v)->ops, fpa);
+		display(*s, fpa);
 		vec_dispose(&(*v)->s1);
 		vec_dispose(&(*v)->s2);
 		pop_vec_stacks(v, *s);
@@ -227,7 +234,7 @@ void	merge(t_stacks **s, t_vecs **v)
 	}
 }
 
-void	merge_hlpr1(t_node **s, t_vecs **v, int s2_top)
+void	merge_hlpr1(t_stacks **s, t_vecs **v, int s2_top)
 {
 	int	i;
 	t_elem	tmp;
@@ -238,27 +245,29 @@ void	merge_hlpr1(t_node **s, t_vecs **v, int s2_top)
 	handle_data_top(s, v, tmp);
 }
 
-void	handle_data_top(t_node **s, t_vecs **v, t_elem e)
+void	handle_data_top(t_stacks **s, t_vecs **v, t_elem e)
 {
 	int	top;
 	int	bot;
 
 	top = e.pos;
-	bot = ft_abs(e.pos - (stack_len(*s) - 1)) + 1;
+	bot = ft_abs(e.pos - (stack_len((*s)->s1) - 1)) + 1;
 	if (top < bot)
 	{
 		while (top--)
 		{
-			ra(s);
+			ra(&(*s)->s1);
 			vector_add(&(*v)->ops, fra);
+			display(*s, fra);
 		}
 	}
 	else
 	{
 		while (bot--)
 		{
-			rra(s);
+			rra(&(*s)->s1);
 			vector_add(&(*v)->ops, frra);
+			display(*s, frra);
 		}
 	}
 }
@@ -286,19 +295,17 @@ int	is_adj_max_min(t_node *s, t_vec *v)
 	return (0);
 }
 
-
-/* make the max min adjacent in s1 */
-void	handle_adj_max_min(t_node **s, t_vecs **v, int data)
+void	handle_adj_max_min(t_stacks **s, t_vecs **v, int data)
 {
 	handle_top_min(s, v, data);
-	sa(s);
+	sa(&(*s)->s1);
 	upd_pos_sa(&(*v)->s1);
 	sort_pos(&(*v)->s1);
 	vector_add(&(*v)->ops, fsa);
+	display(*s, fsa);
 }
 
-/* moves the min elem to the top of stack using up and down only */
-void	handle_top_min1(t_node **s, t_vecs **v, int data)
+void	handle_top_min1(t_stacks **s, t_vecs **v, int data)
 {
 	t_hand_top	vars;
 
@@ -309,26 +316,27 @@ void	handle_top_min1(t_node **s, t_vecs **v, int data)
 	{
 		while (vars.top--)
 		{
-			ra(s);
+			ra(&(*s)->s1);
 			vector_add(&(*v)->ops, fra);
+			display(*s, fra);
 		}
 	}
 	else
 	{
 		while (vars.bot--)
 		{
-			rra(s);
+			rra(&(*s)->s1);
 			vector_add(&(*v)->ops, frra);
+			display(*s, frra);
 		}
 	}
 }
 
-/* for s2, rotates the max to the top */
-void	handle_top_max(t_node **s, t_vecs **v, int data)
+void	handle_top_max(t_stacks **s, t_vecs **v, int data)
 {
 	t_hand_top 	vars;
 
-	vars.len = stack_len(*s) - 1;
+	vars.len = stack_len((*s)->s2) - 1;
 	vars.tmp = (*v)->s2->arr[get_elem((*v)->s2, data)];
 	vars.top = 0;
 	if (vars.tmp.pos)
@@ -337,31 +345,33 @@ void	handle_top_max(t_node **s, t_vecs **v, int data)
 	handle_top_max_hlpr(s, v, vars);
 }
 
-void	handle_top_max_hlpr(t_node **s, t_vecs **v, t_hand_top vars)
+void	handle_top_max_hlpr(t_stacks **s, t_vecs **v, t_hand_top vars)
 {
 	if (vars.top < vars.bot)
 	{
 		while (vars.top--)
 		{
-			rb(s);
+			rb(&(*s)->s2);
 			vector_add(&(*v)->ops, frb);
+			display(*s, frb);
 		}
 	}
 	else
 	{
 		while (vars.bot--)
 		{
-			rrb(s);
+			rrb(&(*s)->s2);
 			vector_add(&(*v)->ops, frrb);
+			display(*s, frrb);
 		}
 	}
 }
 
-void	handle_top_min(t_node **s, t_vecs **v, int data)
+void	handle_top_min(t_stacks **s, t_vecs **v, int data)
 {
 	t_hand_top	vars;
 
-	vars.len = stack_len(*s) - 1;
+	vars.len = stack_len((*s)->s1) - 1;
 	vars.tmp = (*v)->s1->arr[get_elem((*v)->s1, data)];
 	vars.top = 0;
 	if (vars.tmp.pos)
@@ -371,24 +381,26 @@ void	handle_top_min(t_node **s, t_vecs **v, int data)
 	sort_pos(&(*v)->s1);
 }
 
-void	handle_top_min_hlpr(t_node **s, t_vecs **v, t_hand_top vars)
+void	handle_top_min_hlpr(t_stacks **s, t_vecs **v, t_hand_top vars)
 {
 	if (vars.top < vars.bot)
 	{
 		while (vars.top--)
 		{
-			ra(s);
+			ra(&(*s)->s1);
 			upd_pos_ra(&(*v)->s1, vars.len);
 			vector_add(&(*v)->ops, fra);
+			display(*s, fra);
 		}
 	}
 	else
 	{
 		while (vars.bot--)
 		{
-			rra(s);
+			rra(&(*s)->s1);
 			upd_pos_rra(&(*v)->s1, vars.len);
 			vector_add(&(*v)->ops, frra);
+			display(*s, frra);
 		}
 	}
 }
@@ -553,15 +565,18 @@ void	handle_beg_sa(t_stacks **s, t_vecs **v)
 	{
 		sa(&(*s)->s1);
 		vector_add(&(*v)->ops, fsa);
+		display(*s, fsa);
 	}
 }
 
 void	handle_beg_pb(t_stacks **s, t_vecs **v)
 {
 	pb(&(*s)->s1, &(*s)->s2);
+	vector_add(&(*v)->ops, fpb);
+	display(*s, fpb);
 	pb(&(*s)->s1, &(*s)->s2);
 	vector_add(&(*v)->ops, fpb);
-	vector_add(&(*v)->ops, fpb);
+	display(*s, fpb);
 }
 
 /* 25 lines */

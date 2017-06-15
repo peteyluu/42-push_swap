@@ -6,7 +6,7 @@
 /*   By: pluu <pluu@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/17 18:30:41 by pluu              #+#    #+#             */
-/*   Updated: 2017/06/12 16:25:17 by pluu             ###   ########.fr       */
+/*   Updated: 2017/06/14 14:41:35 by pluu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ t_node	*stack_pop(t_node **s)
 	t_node	*curr;
 	t_node	*prev;
 
+	if (!*s)
+		return (NULL);
 	if (!(*s)->next)
 	{
 		curr = *s;
