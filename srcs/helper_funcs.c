@@ -6,7 +6,7 @@
 /*   By: pluu <pluu@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 14:45:46 by pluu              #+#    #+#             */
-/*   Updated: 2017/06/12 16:36:24 by pluu             ###   ########.fr       */
+/*   Updated: 2017/06/15 13:09:16 by pluu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,6 @@ void	swap(int *a, int *b)
 	*b = tmp;
 }
 
-int	is_sort(t_node *s1, t_node *s2)
-{
-	if (stack_empty(s1) || !stack_empty(s2))
-		return (0);
-	while (s1 && s1->next)
-	{
-		if (s1->data < s1->next->data)
-			return (0);
-		s1 = s1->next;
-	}
-	return (1);
-}
 
 int	ft_isnumber(char *s)
 {

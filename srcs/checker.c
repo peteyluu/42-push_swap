@@ -6,7 +6,7 @@
 /*   By: pluu <pluu@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 16:42:48 by pluu              #+#    #+#             */
-/*   Updated: 2017/06/14 15:32:37 by pluu             ###   ########.fr       */
+/*   Updated: 2017/06/15 11:31:57 by pluu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char **argv)
 		ft_putstr_fd("Error\n", STDERR_FILENO);
 	else
 	{
-		run(&s->s1, &s->s2, ops);
+		run(&s, ops);
 		if (is_sort(s->s1, s->s2))
 			ft_putstr("OK\n");
 		else
@@ -36,44 +36,42 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-
-void	run_op(t_node **s1, t_node **s2, int op)
-{
-
-	if (op == fsa)
-		sa(s1);
-	else if (op == fsb)
-		sb(s2);
-	else if (op == fss)
-		ss(s1, s2);
-	else if (op == fpa)
-		pa(s1, s2);
-	else if (op == fpb)
-		pb(s1, s2);
-	else if (op == fra)
-		ra(s1);
-	else if (op == frb)
-		rb(s2);
-	else if (op == frr)
-		rr(s1, s2);
-	else if (op == frra)
-		rra(s1);
-	else if (op == frrb)
-		rrb(s2);
-	else
-		rrr(s1, s2);
-}
-
-void	run(t_node **s1, t_node **s2, t_vector *ops)
+void	run(t_stacks **s, t_vector *ops)
 {
 	int	i;
-	int	j;
 
+	display(*s, fn);
 	i = 0;
-	j = ops->log_len;
-	while (i < j)
+	while (i < ops->log_len)
 	{
-		run_op(s1, s2, ops->arr[i]);
+		run_op(s, ops->arr[i]);
+		display(*s, ops->arr[i]);
 		i++;
 	}
+}
+
+void	run_op(t_stacks **s, int op)
+{
+	if (op == fsa)
+		sa(&(*s)->s1);
+	else if (op == fsb)
+		sb(&(*s)->s2);
+	else if (op == fss)
+		ss(&(*s)->s1, &(*s)->s2);
+	else if (op == fpa)
+		pa(&(*s)->s1, &(*s)->s2);
+	else if (op == fpb)
+		pb(&(*s)->s1, &(*s)->s2);
+	else if (op == fra)
+		ra(&(*s)->s1);
+	else if (op == frb)
+		rb(&(*s)->s2);
+	else if (op == frr)
+		rr(&(*s)->s1, &(*s)->s2);
+	else if (op == frra)
+		rra(&(*s)->s1);
+	else if (op == frrb)
+		rrb(&(*s)->s2);
+	else
+		rrr(&(*s)->s1, &(*s)->s2);
 }

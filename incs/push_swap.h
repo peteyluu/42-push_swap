@@ -6,7 +6,7 @@
 /*   By: pluu <pluu@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/10 18:41:30 by pluu              #+#    #+#             */
-/*   Updated: 2017/06/14 18:08:19 by pluu             ###   ########.fr       */
+/*   Updated: 2017/06/15 15:06:47 by pluu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ enum
 	frrr
 };
 
+typedef struct		s_gcs
+{
+	int		i;
+	int		j;
+	int		k;
+}			t_gcs;
+
 typedef struct		s_elem
 {
 	int		data;
@@ -49,16 +56,16 @@ typedef struct		s_elem
 	int		total;
 }			t_elem;
 
-typedef struct		s_is_adj_max_min
+typedef struct		s_iamm
 {
 	int		min;
 	int		max;
 	int		idx_min;
 	int		idx_max;
 	int		j;
-}			t_is_adj_max_min;
+}			t_iamm;
 
-typedef struct		s_get_b_sort
+typedef struct		s_gbs
 {
 	int		min;
 	int		max;
@@ -68,17 +75,17 @@ typedef struct		s_get_b_sort
 	int		tmp1;
 	int		tmp2;
 	t_elem		tmp;
-}			t_get_b_sort;
+}			t_gbs;
 
-typedef struct		s_hand_top
+typedef struct		s_top
 {
 	int		top;
 	int		bot;
 	int		len;
 	t_elem		tmp;
-}			t_hand_top;
+}			t_top;
 
-typedef struct		s_is_sort_s
+typedef struct		s_sort
 {
 	int		i;
 	int		j;
@@ -87,7 +94,7 @@ typedef struct		s_is_sort_s
 	int		decr;
 	int		incr;
 
-}			t_is_sort_s;
+}			t_sort;
 
 typedef struct		s_merge
 {
@@ -135,79 +142,112 @@ typedef struct		s_vecs
 
 /* display.c */
 void    display(t_stacks *s, int func);
-void    disp_stacks(t_stacks *s);
-void    disp_stacks_c(t_stacks *s);
-void    disp_spacing(int n);
-void    disp_spacing_c(int n);
-void    disp_op(int op);
-void    disp_op_c(int op);
+void    disp_dispose_node(t_node **s1, t_node **s2);
 int     num_digits(int n);
+
+/* display_v.c */
+void    disp_header(void);
+void    disp_stacks(t_stacks *s);
+void    disp_spacing(int n);
+void    disp_op(int op);
+
+/*display_c.c */
+void    disp_header_c(void);
+void    disp_stacks_c(t_stacks *s);
+void    disp_spacing_c(int n);
+void    disp_op_c(int op);
 
 /* push_swap.c */
 void    solve_ps(t_stacks **s, t_vecs **v);
 void    sort_three(t_stacks **s, t_vector **v);
 void    sort_five(t_stacks **s, t_vecs **v);
 void    sort_rand(t_stacks **s, t_vecs **v);
-void    handle_beg_sa(t_stacks **s, t_vecs **v);
-void    handle_beg_pb(t_stacks **s, t_vecs **v);
+
+/* sort_funcs1.c */
+int	is_sort(t_node *s1, t_node *s2);
+int	is_sort_sa(t_node *s1);
+void    init_issort_vars(t_sort *vars, t_vec *v, t_node *s);
+int     is_sort_stack(t_vec *v, t_node *s);
+void    sort_ascend(t_stacks **s, t_vecs **v);
+
+/* sort_funcs2.c */
 void	sort_pos(t_vec **v);
 void    sort_data(t_vec **v);
 void	sort_total(t_vec**v);
-int     is_sort_stack(t_vec *v, t_node *s);
-void    init_issort_vars(t_is_sort_s *vars, t_vec *v, t_node *s);
-void    merge(t_stacks **s, t_vecs **v);
-void    merge_hlpr1(t_stacks **s, t_vecs **v, int s2_top);
-void    handle_data_top(t_stacks **s, t_vecs **v, t_elem e);
-void    handle_top_min(t_stacks **s, t_vecs **v, int data);
-void    handle_top_min_hlpr(t_stacks **s, t_vecs **v, t_hand_top vars);
-int	get_elem(t_vec *v, int target);
-int     get_elem1(t_vec *v, int target);
-int     get_elem2(t_vec *v, int target);
-void    init_merge_vars(t_merge *vars, t_stacks *s);
-int     is_adj_max_min(t_node *s, t_vec *v);
-void    handle_adj_max_min(t_stacks **s, t_vecs **v, int data);
-void    handle_top_min1(t_stacks **s, t_vecs **v, int data);
-void    sort_ascend(t_stacks **s, t_vecs **v);
-void    pop_vec_b_sort(t_vecs **v, t_node *s);
-void	get_b_sort(t_vec *v, t_node *s, t_elem *e);
-void    get_b_sort_hlpr(t_elem *e, t_get_b_sort vars);
+
+/* ps_funcs.c */
 void    exe_elem(t_elem e, t_stacks **s, t_vector **ops);
 void    exe_op(t_stacks **s, int op);
-void    pop_vec_ab_op(t_vec **v);
-void    pop_vec_ab_op_hlpr(t_elem *e);
-void    handle_top_max(t_stacks **s, t_vecs **v, int data);
-void    handle_top_max_hlpr(t_stacks **s, t_vecs **v, t_hand_top vars);
 void    ops_print(t_vector *ops);
-int	is_sort_sa(t_node *s1);
 
-/* get_check_stack.c */
+/* merge.c */
+void    init_merge_vars(t_merge *vars, t_stacks *s);
+void    merge(t_stacks **s, t_vecs **v);
+void    merge_hlpr1(t_stacks **s, t_vecs **v, int s2_top);
+int     is_adj_max_min(t_node *s, t_vec *v);
+void    handle_adj_max_min(t_stacks **s, t_vecs **v, int data);
+
+/* handle_funcs1.c */
+void    handle_top_min1(t_stacks **s, t_vecs **v, int data);
+void    handle_data_top(t_stacks **s, t_vecs **v, t_elem e);
+void    handle_beg_sa(t_stacks **s, t_vecs **v);
+void    handle_beg_pb(t_stacks **s, t_vecs **v);
+
+/* handle_funcs2.c */
+void    handle_top_max(t_stacks **s, t_vecs **v, int data);
+void    handle_top_max_hlpr(t_stacks **s, t_vecs **v, t_top vars);
+void    handle_top_min(t_stacks **s, t_vecs **v, int data);
+void    handle_top_min_hlpr(t_stacks **s, t_vecs **v, t_top vars);
+
+/* get_check_stack1.c */
 int	get_check_stack(int argc, char **argv, t_stacks **s);
+void    get_flag(t_stacks **s, char **str);
+int     is_v_flag(char **s);
+int     is_c_flag(char **s);
+
+/* get_check_stack2.c */
 int	is_dup(char **argv, int j);
 int	get_2darr_len(char **argv);
 void	arr_dispose(char **arr);
 int	is_valid_num(char **argv, int i);
-int     is_v_flag(char **s);
-int     is_c_flag(char **s);
 
 /* get_check_ops.c */
 int	get_check_ops(t_vector **ops);
 int	get_op(char *s);
 
+/* get_elem.c */
+int	get_elem(t_vec *v, int target);
+int     get_elem1(t_vec *v, int target);
+int     get_elem2(t_vec *v, int target);
+
 /* checker.c */
-void	run(t_node **s1, t_node **s2, t_vector *ops);
-void	run_op(t_node **s1, t_node **s2, int op);
+void	run(t_stacks **s, t_vector *ops);
+void	run_op(t_stacks **s, int op);
 
 /* vecs.c */
 void    init_vecs(t_vecs **vecs);
+void    vecs_dispose(t_vecs **v);
+
+/* vec_funcs1.c */
 void    init_vec(t_vec **v, int len);
+void    vec_dispose(t_vec **v);
+void    vec_print(t_vec *v);
 void    pop_vec_stacks(t_vecs **v, t_stacks *s);
-void    pop_vec_total(t_vec **v);
+void    pop_vec(t_vec **v, t_node *s1);
+
+/* vec_funcs2.c */
 void    pop_vec_a_top(t_vec **v, t_node *s);
 void    get_vec_a_top(t_elem *e, t_node *s);
-void    pop_vec(t_vec **v, t_node *s1);
-void    vec_dispose(t_vec **v);
-void    vecs_dispose(t_vecs **v);
-void    vec_print(t_vec *v);
+void    pop_vec_b_sort(t_vecs **v, t_node *s);
+void	get_b_sort(t_vec *v, t_node *s, t_elem *e);
+void    get_b_sort_hlpr(t_elem *e, t_gbs vars);
+
+/* vec_funcs3.c */
+void    pop_vec_ab_op(t_vec **v);
+void    pop_vec_ab_op_hlpr(t_elem *e);
+void    pop_vec_total(t_vec **v);
+
+/* update_pos.c */
 void    upd_pos_rra(t_vec **v, int j);
 void    upd_pos_ra(t_vec **v, int j);
 void    upd_pos_sa(t_vec **v);
@@ -216,7 +256,7 @@ void    upd_pos_sa(t_vec **v);
 void    init_stacks(t_stacks **s);
 void    stacks_dispose(t_stacks **s);
 
-/* stack.c */
+/* stack */
 t_node	*stack_new(int elem);
 void	stack_push(t_node **s, int elem);
 void	stack_push_node(t_node **s, t_node *node);
@@ -256,7 +296,6 @@ void	rrr(t_node **s1, t_node **s2);
 /* helper_funcs.c */
 int	ft_abs(int n);
 void	swap(int *a, int *b);
-int	is_sort(t_node *s1, t_node *s2);
 int	ft_isnumber(char *s);
 int	is_int(char *s);
 long	ft_strtol(char *s);

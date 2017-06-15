@@ -6,7 +6,7 @@
 #    By: pluu <pluu@student.42.us.org>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/05/09 19:07:03 by pluu              #+#    #+#              #
-#    Updated: 2017/06/14 14:04:49 by pluu             ###   ########.fr        #
+#    Updated: 2017/06/15 15:10:57 by pluu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,12 +30,26 @@ SRCS	       = srcs/stack_funcs1.c \
 		 srcs/operations_push.c \
 		 srcs/operations_rotate.c \
 		 srcs/operations_rev_rotate.c \
-		 srcs/get_check_stack.c \
+		 srcs/get_check_stack1.c \
+		 srcs/get_check_stack2.c \
 		 srcs/get_check_ops.c \
 		 srcs/helper_funcs.c \
+		 srcs/get_elem.c \
+		 srcs/ps_funcs.c \
+		 srcs/merge.c \
+		 srcs/sort_funcs1.c \
+		 srcs/sort_funcs2.c \
+		 srcs/handle_funcs1.c \
+		 srcs/handle_funcs2.c \
+		 srcs/update_pos.c \
 		 srcs/stacks.c \
 		 srcs/vecs.c \
-		 srcs/display.c
+		 srcs/vec_funcs1.c \
+		 srcs/vec_funcs2.c \
+		 srcs/vec_funcs3.c \
+		 srcs/display.c \
+		 srcs/display_c.c \
+		 srcs/display_v.c
 
 SRCS_CK         = srcs/checker.c
 SRCS_PS		= srcs/push_swap.c

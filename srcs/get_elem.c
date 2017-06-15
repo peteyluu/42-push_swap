@@ -1,52 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display.c                                          :+:      :+:    :+:   */
+/*   get_elem.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pluu <pluu@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/14 13:50:36 by pluu              #+#    #+#             */
-/*   Updated: 2017/06/15 13:00:25 by pluu             ###   ########.fr       */
+/*   Created: 2017/06/15 14:25:56 by pluu              #+#    #+#             */
+/*   Updated: 2017/06/15 14:42:11 by pluu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	display(t_stacks *s, int func)
+int	get_elem2(t_vec *v, int target)
 {
-	if (s->c_flag)
+	int	i;
+
+	i = 0;
+	while (i < v->log_len)
 	{
-		disp_stacks_c(s);
-		disp_op_c(func);
-		ft_putchar('\n');
+		if (v->arr[i].data > target)
+			return (--i);
+		i++;
 	}
-	else if (s->v_flag)
-	{
-		disp_stacks(s);
-		disp_op(func);
-		ft_putchar('\n');
-	}
+	return (-1);
 }
 
-void	disp_dispose_node(t_node **s1, t_node **s2)
+int	get_elem1(t_vec *v, int target)
 {
-	ft_memdel((void**)s1);
-	ft_memdel((void**)s2);
+	int	i;
+
+	i = 0;
+	while (i < v->log_len)
+	{
+		if (v->arr[i].data > target)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
-int	num_digits(int n)
+int	get_elem(t_vec *v, int target)
 {
-	int	cnt;
+	int	i;
 
-	if (!n)
-		return (1);
-	cnt = 0;
-	if (n < 0)
-		cnt = 1;
-	while (n)
+	i = 0;
+	while (i < v->log_len)
 	{
-		n /= 10;
-		cnt++;
+		if (v->arr[i].data == target)
+			return (i);
+		i++;
 	}
-	return (cnt);
+	return (-1);
 }
