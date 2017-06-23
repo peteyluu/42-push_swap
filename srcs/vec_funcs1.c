@@ -6,7 +6,7 @@
 /*   By: pluu <pluu@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/15 15:07:11 by pluu              #+#    #+#             */
-/*   Updated: 2017/06/15 15:10:39 by pluu             ###   ########.fr       */
+/*   Updated: 2017/06/23 13:04:57 by pluu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	init_vec(t_vec **v, int len)
 {
-	*v = (t_vec*)malloc(sizeof(t_vec));
+	if (!(*v = (t_vec*)malloc(sizeof(t_vec))))
+		exit(-1);
 	(*v)->log_len = 0;
 	(*v)->alloc_len = len;
 	if (!((*v)->arr = (t_elem*)malloc(sizeof(t_elem) * len)))

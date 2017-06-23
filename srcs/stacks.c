@@ -6,7 +6,7 @@
 /*   By: pluu <pluu@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/05 14:08:57 by pluu              #+#    #+#             */
-/*   Updated: 2017/06/14 15:19:39 by pluu             ###   ########.fr       */
+/*   Updated: 2017/06/23 12:57:55 by pluu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	init_stacks(t_stacks **s)
 {
-	*s = (t_stacks*)malloc(sizeof(t_stacks));
+	if (!(*s = (t_stacks*)malloc(sizeof(t_stacks))))
+		exit(-1);
 	(*s)->s1 = NULL;
 	(*s)->s2 = NULL;
 	(*s)->v_flag = 0;
